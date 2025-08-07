@@ -5,6 +5,7 @@ services:
     branch: main
     buildCommand: npm install && npm run build
     staticPublishPath: build
+    skipStart: true
     envVars:
       - key: NODE_VERSION
         value: 18.x
