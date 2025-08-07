@@ -2,8 +2,11 @@ services:
   - type: web
     name: mapleluxe
     env: static
-    buildCommand: npm install && npm run build
-    staticPublishPath: ./build
+    buildCommand: |
+      cd ..
+      npm install
+      npm run build
+    staticPublishPath: ../build
     rootDirectory: /
     envVars:
       - key: NODE_VERSION
