@@ -163,6 +163,36 @@ export default function MapeLuxeSite() {
         </div>
       </section>
 
+      {/* Trust Indicators */}
+      <section className="py-16 bg-white">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-2xl md:text-3xl font-black tracking-tight" style={{color: "#5A3A1B"}}>Trusted by Calgary Homeowners</h2>
+            <p className="mt-2 text-neutral-600">Licensed, insured, and committed to excellence</p>
+          </div>
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
+            {[
+              {icon: "🏆", title: "15+ Years", subtitle: "Experience"},
+              {icon: "✅", title: "Licensed", subtitle: "& Insured"},
+              {icon: "⭐", title: "4.9/5 Rating", subtitle: "Customer Reviews"},
+              {icon: "🛡️", title: "Warranty", subtitle: "Guaranteed"}
+            ].map((item, i) => (
+              <div key={i} className="text-center">
+                <div className="text-3xl mb-3">{item.icon}</div>
+                <div className="font-bold text-lg" style={{color: "#5A3A1B"}}>{item.title}</div>
+                <div className="text-sm text-neutral-600">{item.subtitle}</div>
+              </div>
+            ))}
+          </div>
+          <div className="mt-12 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-2 bg-green-50 rounded-full border border-green-200">
+              <div className="h-2 w-2 bg-green-500 rounded-full animate-pulse"></div>
+              <span className="text-sm font-medium text-green-700">Currently accepting new projects</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Projects */}
       <section id="projects" className="py-20 bg-white">
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
@@ -215,17 +245,18 @@ export default function MapeLuxeSite() {
         <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="mb-10">
             <h2 className="text-3xl md:text-4xl font-black tracking-tight" style={{color: "#5A3A1B"}}>What Clients Say</h2>
-            <p className="mt-2 max-w-2xl text-neutral-700">Owners and tenants rate us for communication, quality and reliability.</p>
+            <p className="mt-2 max-w-2xl text-neutral-700">Calgary homeowners trust MapeLuxe for quality construction and reliable service.</p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {[
-              {q:"MapeLuxe turned our yard into a private oasis and handled the entire rental process flawlessly.", a:"— Sarah M., Owner"},
-              {q:"Responsive team. Maintenance tickets are handled same‑day—couldn't ask for better.", a:"— Daniel K., Tenant"},
-              {q:"Crystal‑clear reporting and predictable budgets. They care about the details.", a:"— Imran R., Investor"},
+              {q:"MapeLuxe built our custom fence and deck perfectly. Quality workmanship that's built to last through Calgary winters.", a:"— Jennifer L., Homeowner", rating: "⭐⭐⭐⭐⭐"},
+              {q:"Professional construction team that exceeded our expectations. Clean, reliable, and finished on time.", a:"— Michael R., Property Owner", rating: "⭐⭐⭐⭐⭐"},
+              {q:"Best cleaning service we've used. Attention to detail and great communication throughout the project.", a:"— Amanda K., Calgary", rating: "⭐⭐⭐⭐⭐"},
             ].map((t,i)=> (
-              <div key={i} className="rounded-2xl bg-white ring-1 ring-black/5 p-6 shadow-sm">
-                <p className="text-[15px] text-neutral-800">"{t.q}"</p>
-                <div className="mt-3 text-sm font-semibold" style={{color: "#5A3A1B"}}>{t.a}</div>
+              <div key={i} className="rounded-2xl bg-white ring-1 ring-black/5 p-6 shadow-sm hover:shadow-md transition-shadow">
+                <div className="text-sm text-yellow-500 mb-2">{t.rating}</div>
+                <p className="text-[15px] text-neutral-800 italic">"{t.q}"</p>
+                <div className="mt-4 text-sm font-semibold" style={{color: "#5A3A1B"}}>{t.a}</div>
               </div>
             ))}
           </div>
