@@ -286,7 +286,7 @@ export default function MapeLuxeSite() {
           <form action="https://formsubmit.co/mapleluxebookings@gmail.com" method="POST" className="grid gap-4 md:grid-cols-2">
             {/* FormSubmit Configuration */}
             <input type="hidden" name="_subject" value="New Quote Request from MapeLuxe Website" />
-            <input type="hidden" name="_next" value="https://mapleluxe.com/thank-you" />
+            <input type="hidden" name="_next" value="https://mapleluxe.ca/thank-you" />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_template" value="table" />
             
