@@ -283,7 +283,7 @@ export default function MapeLuxeSite() {
             <h2 className="text-3xl md:text-4xl font-black tracking-tight" style={{color: "#5A3A1B"}}>Contact Us</h2>
             <p className="mt-2 max-w-2xl text-neutral-700">Tell us about your property or project. We'll respond within one business day.</p>
           </div>
-          <form action="https://formsubmit.co/mapleluxebookings@gmail.com" method="POST" className="grid gap-4 md:grid-cols-2">
+          <form action="https://formsubmit.co/mapleluxebookings+reset@gmail.com" method="POST" className="grid gap-4 md:grid-cols-2">
             {/* FormSubmit Configuration */}
             <input type="hidden" name="_subject" value="New Quote Request from MapeLuxe Website" />
             <input type="hidden" name="_next" value="https://mapleluxe.com/thank-you" />
