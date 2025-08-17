@@ -299,6 +299,7 @@ export default function MapeLuxeSite() {
             <input type="hidden" name="_subject" value="New Quote Request from MapeLuxe Website" />
             <input type="hidden" name="_captcha" value="false" />
             <input type="hidden" name="_template" value="table" />
+            <input type="hidden" name="_next" value="https://mapleluxe.ca/thank-you" />
             
             <div className="grid gap-1">
               <label className="text-sm font-medium">Full name</label>
