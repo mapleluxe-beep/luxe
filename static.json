@@ -2,6 +2,7 @@
   "root": "build/",
   "clean_urls": false,
   "routes": {
+    "/thank-you": "index.html",
     "/**": "index.html"
   }
 }
