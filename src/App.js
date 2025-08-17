@@ -283,25 +283,31 @@ export default function MapeLuxeSite() {
             <h2 className="text-3xl md:text-4xl font-black tracking-tight" style={{color: "#5A3A1B"}}>Contact Us</h2>
             <p className="mt-2 max-w-2xl text-neutral-700">Tell us about your property or project. We'll respond within one business day.</p>
           </div>
-          <form onSubmit={(e)=> e.preventDefault()} className="grid gap-4 md:grid-cols-2">
+          <form name="mapleluxe-contact" method="POST" netlify className="grid gap-4 md:grid-cols-2">
+            <input type="hidden" name="form-name" value="mapleluxe-contact" />
             <div className="grid gap-1">
-              <label className="text-sm font-medium">Full name</label>
-              <input required type="text" placeholder="Jane Doe" className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]" />
+              <label className="text-sm font-medium" htmlFor="name">Full name</label>
+              <input required type="text" name="name" id="name" placeholder="Jane Doe" className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]" />
             </div>
             <div className="grid gap-1">
-              <label className="text-sm font-medium">Email</label>
-              <input required type="email" placeholder="jane@email.com" className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]" />
+              <label className="text-sm font-medium" htmlFor="email">Email</label>
+              <input required type="email" name="email" id="email" placeholder="jane@email.com" className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]" />
             </div>
             <div className="grid gap-1">
-              <label className="text-sm font-medium">Phone</label>
-              <input type="tel" placeholder="(555) 000-0000" className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]" />
+              <label className="text-sm font-medium" htmlFor="phone">Phone</label>
+              <input type="tel" name="phone" id="phone" placeholder="(555) 000-0000" className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]" />
             </div>
             <div className="grid gap-1 md:col-span-2">
-              <label className="text-sm font-medium">Message</label>
-              <textarea rows={4} placeholder="What can we help with?" className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]" />
+              <label className="text-sm font-medium" htmlFor="message">Message</label>
+              <textarea rows={4} name="message" id="message" placeholder="What can we help with?" className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]" />
             </div>
             <div className="md:col-span-2">
-              <button type="submit" className="w-full md:w-auto inline-flex items-center rounded-2xl px-6 py-3 text-sm font-semibold border border-[#5A3A1B] text-white hover:opacity-95" style={{backgroundColor: "#5A3A1B"}}>Send Message</button>
+              <button type="submit" className="w-full md:w-auto inline-flex items-center rounded-2xl px-6 py-3 text-sm font-semibold border border-[#5A3A1B] text-white hover:opacity-95 transition-opacity" style={{backgroundColor: "#5A3A1B"}}>
+                <svg className="mr-2 h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
+                </svg>
+                Send Message
+              </button>
             </div>
           </form>
         </div>
