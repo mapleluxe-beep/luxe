@@ -283,7 +283,7 @@ export default function MapeLuxeSite() {
             <h2 className="text-3xl md:text-4xl font-black tracking-tight" style={{color: "#5A3A1B"}}>Contact Us</h2>
             <p className="mt-2 max-w-2xl text-neutral-700">Tell us about your property or project. We'll respond within one business day.</p>
           </div>
-          <form name="mapleluxe-contact" method="POST" netlify className="grid gap-4 md:grid-cols-2">
+          <form name="mapleluxe-contact" method="POST" data-netlify="true" action="/" className="grid gap-4 md:grid-cols-2">
             <input type="hidden" name="form-name" value="mapleluxe-contact" />
             <div className="grid gap-1">
               <label className="text-sm font-medium" htmlFor="name">Full name</label>
