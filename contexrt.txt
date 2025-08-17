@@ -1,0 +1,101 @@
+MapleLuxe Project Documentation
+Project Overview
+MapleLuxe is a modern residential contracting and property management website built with React and Tailwind CSS. The project features a single-page application (SPA) design with smooth animations and a responsive layout.
+
+Project Structure
+The project follows a standard React application structure with the following key components:
+
+mapleluxe/
+├── public/                  # Static files
+│   ├── index.html           # Main HTML template
+│   ├── favicon.ico          # Site favicon
+│   └── _redirects           # For client-side routing
+├── src/                     # Source code
+│   ├── App.js               # Main application component
+│   ├── index.js             # Application entry point
+│   ├── index.css            # Global styles
+│   └── components/          # Reusable UI components
+├── package.json             # Project dependencies and scripts
+├── tailwind.config.js       # Tailwind CSS configuration
+└── render.yaml              # Render deployment configuration
+Key Technologies
+React 18: Frontend library for building user interfaces
+Tailwind CSS: Utility-first CSS framework for styling
+Framer Motion: Animation library for React
+React Router: Client-side routing
+Vite/Webpack: Build tooling (depending on project setup)
+Design System
+Primary Color: Brown (#5A3A1B)
+Accent Color: Gold (#D4AF37)
+Background: Cream (#F7F3ED)
+Text: Dark Charcoal (#1F1F1F)
+Main Components
+1. Navigation
+Sticky header with logo and navigation links
+Mobile-responsive menu
+Call-to-action button
+2. Hero Section
+Animated headline and subheadline
+Key performance indicators (KPIs)
+Call-to-action buttons
+3. Services
+Grid layout of service cards
+Icons for each service
+Hover effects
+4. Why Choose Us
+Two-column layout with text and image
+Bullet points of key benefits
+Featured project showcase
+5. Recent Work
+Portfolio grid
+Project cards with images and descriptions
+6. Testimonials
+Client quotes and ratings
+Responsive grid layout
+7. Contact Form
+Form validation
+Responsive layout
+Form submission handling
+8. Footer
+Copyright information
+Quick links
+Development Setup
+Prerequisites
+Node.js (v16+)
+npm or yarn
+Installation
+bash
+# Install dependencies
+npm install
+
+# Start development server
+npm start
+
+# Build for production
+npm run build
+Deployment
+The project is configured for deployment on Render.com. The 
+render.yaml
+ file contains the deployment configuration.
+
+Form Handling
+The contact form currently doesn't have a backend. You can integrate it with:
+
+Formspree
+Netlify Forms
+Custom backend API
+Customization
+Update colors in 
+tailwind.config.js
+Modify content in respective component files
+Add/remove sections in 
+App.js
+Browser Support
+Chrome (latest)
+Firefox (latest)
+Safari (latest)
+Edge (latest)
+Performance
+Code splitting with React.lazy
+Image optimization
+Minified production build
