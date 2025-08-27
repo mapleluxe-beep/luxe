@@ -172,7 +172,7 @@ export default function MapeLuxeSite() {
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8">
             {[
-              {icon: "🏆", title: "15+ Years", subtitle: "Experience"},
+              {icon: "🏆", title: "8+ Years", subtitle: "Experience"},
               {icon: "✅", title: "Licensed", subtitle: "& Insured"},
               {icon: "⭐", title: "4.9/5 Rating", subtitle: "Customer Reviews"},
               {icon: "🛡️", title: "Warranty", subtitle: "Guaranteed"}
@@ -249,7 +249,7 @@ export default function MapeLuxeSite() {
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             {[
-              {q:"MapeLuxe built our custom fence and deck perfectly. Quality workmanship that's built to last through Calgary winters.", a:"— Jennifer L., Homeowner", rating: "⭐⭐⭐⭐⭐"},
+              {q:"MapeLuxe built our custom fence and deck perfectly. Quality workmanship that's built to last through Calgary winters.", a:"— Rachel L., Homeowner", rating: "⭐⭐⭐⭐⭐"},
               {q:"Professional construction team that exceeded our expectations. Clean, reliable, and finished on time.", a:"— Michael R., Property Owner", rating: "⭐⭐⭐⭐⭐"},
               {q:"Best cleaning service we've used. Attention to detail and great communication throughout the project.", a:"— Amanda K., Calgary", rating: "⭐⭐⭐⭐⭐"},
             ].map((t,i)=> (
