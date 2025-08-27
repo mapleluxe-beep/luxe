@@ -76,11 +76,11 @@ export default function MapeLuxeSite() {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
               </svg>
             </a>
-            <a href="tel:(403) 555-0123" className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-2xl border-2 transition-all duration-300 hover:shadow-lg" style={{color: "#5A3A1B", borderColor: "#5A3A1B"}}>
+            <a href="tel:(587) 400-4071" className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-2xl border-2 transition-all duration-300 hover:shadow-lg" style={{color: "#5A3A1B", borderColor: "#5A3A1B"}}>
               <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
               </svg>
-              (403) 555-0123
+              (587) 400-4071
             </a>
           </div>
           <div className="mt-12 grid grid-cols-2 md:grid-cols-4 gap-6">
@@ -206,11 +206,11 @@ export default function MapeLuxeSite() {
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
                 </svg>
               </a>
-              <a href="tel:(403) 555-0123" className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-2xl border-2 transition-all duration-300 hover:shadow-lg" style={{color: "#5A3A1B", borderColor: "#5A3A1B"}}>
+              <a href="tel:(587) 400-4071" className="inline-flex items-center justify-center px-8 py-4 text-lg font-semibold rounded-2xl border-2 transition-all duration-300 hover:shadow-lg" style={{color: "#5A3A1B", borderColor: "#5A3A1B"}}>
                 <svg className="mr-2 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                (403) 555-0123
+                (587) 400-4071
               </a>
             </div>
           </div>
@@ -327,6 +327,74 @@ export default function MapeLuxeSite() {
               <label className="text-sm font-medium">Project details</label>
               <textarea rows={4} name="message" placeholder="Tell us about your project..." className="rounded-xl border border-black/10 bg-white px-4 py-3 outline-none focus:ring-2 focus:ring-[#D4AF37]"></textarea>
             </div>
+            
+            {/* Media Upload Section */}
+            <div className="md:col-span-2 bg-blue-50 border border-blue-200 rounded-lg p-6">
+              <div className="flex items-start space-x-3">
+                <svg className="w-6 h-6 text-blue-600 mt-0.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                </svg>
+                <div className="flex-1">
+                  <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                    📸 Speed Up Your Quote with Photos or Videos
+                  </h3>
+                  <p className="text-sm text-gray-700 mb-4">
+                    <strong>Optional but recommended:</strong> Upload photos or videos of your property to help us provide a more accurate and faster quote. Include current conditions, project area, and any specific details you'd like us to see.
+                  </p>
+                  
+                  <label htmlFor="media-upload" className="block text-sm font-medium text-gray-700 mb-2">
+                    Property Photos/Videos (Optional)
+                  </label>
+                  <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-blue-400 transition-colors">
+                    <input
+                      type="file"
+                      id="media-upload"
+                      name="media"
+                      multiple
+                      accept="image/*,video/*,.pdf,.doc,.docx,.txt,.heic,.webp,.tiff,.bmp,.svg,.avi,.wmv,.flv,.webm,.mkv,.m4v,.3gp,.mov,.mp4"
+                      className="hidden"
+                      onChange={(e) => {
+                        const files = Array.from(e.target.files);
+                        const fileList = document.getElementById('file-list');
+                        fileList.innerHTML = '';
+                        files.forEach(file => {
+                          const div = document.createElement('div');
+                          div.className = 'text-sm text-gray-600 bg-gray-100 px-3 py-1 rounded-full inline-block mr-2 mb-2';
+                          div.textContent = file.name;
+                          fileList.appendChild(div);
+                        });
+                      }}
+                    />
+                    <label htmlFor="media-upload" className="cursor-pointer">
+                      <svg className="w-12 h-12 text-gray-400 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                      </svg>
+                      <p className="text-gray-600">
+                        <span className="font-semibold text-blue-600">Click to upload</span> or drag and drop
+                      </p>
+                      <p className="text-xs text-gray-500 mt-1">
+                        Images: JPG, PNG, HEIC, WebP, TIFF, BMP, SVG<br/>
+                        Videos: MP4, MOV, AVI, WMV, WebM, MKV, FLV, 3GP<br/>
+                        Documents: PDF, DOC, DOCX, TXT • Up to 25MB each
+                      </p>
+                    </label>
+                  </div>
+                  <div id="file-list" className="mt-3"></div>
+                  
+                  <div className="mt-4 bg-green-50 border border-green-200 rounded-md p-3">
+                    <div className="flex items-center">
+                      <svg className="w-4 h-4 text-green-600 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                      <p className="text-sm text-green-800">
+                        <strong>Pro tip:</strong> Including photos can reduce quote turnaround time by up to 50%!
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
             <div className="md:col-span-2">
               <button type="submit" className="w-full md:w-auto inline-flex items-center rounded-2xl px-6 py-3 text-sm font-semibold border border-[#5A3A1B] text-white hover:opacity-95" style={{backgroundColor: "#5A3A1B"}}>Send Message</button>
             </div>

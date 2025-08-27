@@ -75,11 +75,11 @@ export default function ThankYou() {
             <h2 className="text-xl font-bold mb-4">Have Questions?</h2>
             <p className="mb-6">Need to discuss your project urgently or have additional questions?</p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-              <a href="tel:+1-403-555-0123" className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#1F1F1F] px-6 py-3 rounded-2xl font-semibold hover:opacity-95">
+              <a href="tel:+1-587-400-4071" className="inline-flex items-center gap-2 bg-[#D4AF37] text-[#1F1F1F] px-6 py-3 rounded-2xl font-semibold hover:opacity-95">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                 </svg>
-                Call Now: (403) 555-0123
+                Call Now: (587) 400-4071
               </a>
               <a href="mailto:mapleluxebookings@gmail.com" className="inline-flex items-center gap-2 border border-white/20 px-6 py-3 rounded-2xl font-semibold hover:bg-white hover:text-[#5A3A1B]">
                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
