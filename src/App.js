@@ -216,16 +216,16 @@ export default function MapeLuxeSite() {
           </div>
           <div className="grid gap-6 md:grid-cols-3">
             <div className="rounded-3xl overflow-hidden ring-1 ring-black/5 bg-[#F7F3ED]">
-              <div className="aspect-[4/3] bg-cover bg-center" style={{backgroundImage: "url('/images/fence-construction.jpg')"}} />
+              <div className="aspect-[4/3] bg-cover bg-center" style={{backgroundImage: "url('/images/deck-installation.jpg')"}} />
               <div className="p-5">
-                <div className="font-semibold" style={{color: "#5A3A1B"}}>Custom Fence Installation</div>
+                <div className="font-semibold" style={{color: "#5A3A1B"}}>Custom Deck Installation</div>
                 <p className="mt-1 text-sm text-neutral-700">Professional fence construction with quality materials and expert craftsmanship.</p>
               </div>
             </div>
             <div className="rounded-3xl overflow-hidden ring-1 ring-black/5 bg-[#F7F3ED]">
-              <div className="aspect-[4/3] bg-cover bg-center" style={{backgroundImage: "url('/images/framing-construction.jpg')"}} />
+              <div className="aspect-[4/3] bg-cover bg-center" style={{backgroundImage: "url('/images/walkway.webp')"}} />
               <div className="p-5">
-                <div className="font-semibold" style={{color: "#5A3A1B"}}>Custom Home Construction</div>
+                <div className="font-semibold" style={{color: "#5A3A1B"}}>Custom home renovation</div>
                 <p className="mt-1 text-sm text-neutral-700">Quality framing and structural work built to last through Calgary's harsh winters.</p>
               </div>
             </div>
