@@ -1,0 +1,15 @@
+
+> contracting-company-website@1.0.0 build
+> node node_modules/react-scripts/scripts/build.js
+
+(node:16572) [DEP0176] DeprecationWarning: fs.F_OK is deprecated, use fs.constants.F_OK instead
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Creating an optimized production build...
+Browserslist: browsers data (caniuse-lite) is 8 months old. Please run:
+  npx update-browserslist-db@latest
+  Why you should do it regularly: https://github.com/browserslist/update-db#readme
+Failed to compile.
+
+Module not found: Error: Can't resolve 'framer-motion' in 'C:\Users\surface\Documents\GitHub\luxe\src'
+
+

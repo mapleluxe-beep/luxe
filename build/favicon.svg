@@ -1,0 +1,53 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
+  <defs>
+    <linearGradient id="goldMain" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#E8C96A"/>
+      <stop offset="50%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#8B6914"/>
+    </linearGradient>
+    <linearGradient id="goldDark" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#C9A84C"/>
+      <stop offset="100%" stop-color="#7A5C10"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Dark background -->
+  <rect width="64" height="64" rx="12" fill="#080808"/>
+
+  <!-- Left maple leaf -->
+  <g transform="translate(10, 6) scale(0.72) rotate(-18, 20, 20)">
+    <path d="M20 2 L22 10 L30 8 L25 15 L32 16 L26 22 L28 30 L20 25 L12 30 L14 22 L8 16 L15 15 L10 8 L18 10 Z"
+          fill="url(#goldDark)" opacity="0.85"/>
+    <line x1="20" y1="25" x2="20" y2="38" stroke="#7A5C10" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Right maple leaf -->
+  <g transform="translate(34, 6) scale(0.72) rotate(18, 20, 20)">
+    <path d="M20 2 L22 10 L30 8 L25 15 L32 16 L26 22 L28 30 L20 25 L12 30 L14 22 L8 16 L15 15 L10 8 L18 10 Z"
+          fill="url(#goldDark)" opacity="0.85"/>
+    <line x1="20" y1="25" x2="20" y2="38" stroke="#7A5C10" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- Center main maple leaf -->
+  <g transform="translate(14, 3) scale(0.88)">
+    <path d="M20 2 L22.5 11 L32 8.5 L26.5 16 L34 17.5 L27.5 24 L30 33 L20 27 L10 33 L12.5 24 L6 17.5 L13.5 16 L8 8.5 L17.5 11 Z"
+          fill="url(#goldMain)"/>
+    <line x1="20" y1="27" x2="20" y2="42" stroke="#C9A84C" stroke-width="2.5" stroke-linecap="round"/>
+  </g>
+
+  <!-- House silhouette (dark, centered at bottom of leaf stem) -->
+  <g transform="translate(20, 35)">
+    <!-- Roof -->
+    <polygon points="12,0 0,7 24,7" fill="#080808"/>
+    <!-- Body -->
+    <rect x="2" y="7" width="20" height="12" fill="#080808"/>
+    <!-- Door -->
+    <rect x="9" y="13" width="6" height="6" fill="#080808"/>
+    <!-- Window with gold glow -->
+    <rect x="4" y="10" width="4" height="4" rx="0.5" fill="#C9A84C" opacity="0.7"/>
+    <rect x="16" y="10" width="4" height="4" rx="0.5" fill="#C9A84C" opacity="0.7"/>
+  </g>
+
+  <!-- Curved ground line -->
+  <path d="M 10 58 Q 32 54 54 58" stroke="#C9A84C" stroke-width="1.5" fill="none" opacity="0.6" stroke-linecap="round"/>
+</svg>
