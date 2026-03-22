@@ -1,3 +1,155 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* ═══════════════════════════════════════════════════════════════
+   MAPLE LUXE DESIGN SYSTEM
+   Luxury motion tokens · Warm underglow · Architectural polish
+   ═══════════════════════════════════════════════════════════════ */
+
+/* ── Keyframes ─────────────────────────────────────────────── */
+
+/* Sweeping light across a button surface */
+@keyframes ml-shimmer {
+  0%   { transform: translateX(-150%) skewX(-20deg); opacity: 0; }
+  15%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { transform: translateX(260%)  skewX(-20deg); opacity: 0; }
+}
+
+/* Slow border-glow breath on badges / active elements */
+@keyframes ml-breathe {
+  0%, 100% { box-shadow: 0 0 0 1px rgba(212,175,55,0.18), 0 0 12px 0 rgba(212,175,55,0.0); }
+  50%       { box-shadow: 0 0 0 1px rgba(212,175,55,0.35), 0 0 18px 4px rgba(212,175,55,0.07); }
+}
+
+/* ── Outlined Premium CTA Button ───────────────────────────── */
+/*
+   Usage:
+     <a class="ml-btn-outline ...">
+       <span class="ml-sweep" aria-hidden="true"></span>
+       Button Label
+     </a>
+   Requires: position relative, overflow hidden (add via Tailwind)
+*/
+.ml-btn-outline {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.ml-sweep {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent  0%,
+    rgba(212,175,55,0.00) 30%,
+    rgba(212,175,55,0.16) 50%,
+    rgba(212,175,55,0.00) 70%,
+    transparent  100%
+  );
+  transform: translateX(-160%) skewX(-20deg);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.ml-btn-outline:hover .ml-sweep,
+.ml-btn-outline:focus-visible .ml-sweep {
+  animation: ml-shimmer 0.72s ease forwards;
+}
+
+/* ── Primary Gold Button Shimmer ───────────────────────────── */
+/*
+   Usage:
+     <a class="ml-btn-primary ...">
+       <span class="ml-sweep-light" aria-hidden="true"></span>
+       Button Label
+     </a>
+*/
+.ml-btn-primary {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.ml-sweep-light {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    105deg,
+    transparent  0%,
+    rgba(255,255,255,0.00) 30%,
+    rgba(255,255,255,0.20) 50%,
+    rgba(255,255,255,0.00) 70%,
+    transparent  100%
+  );
+  transform: translateX(-160%) skewX(-20deg);
+  pointer-events: none;
+  border-radius: inherit;
+}
+.ml-btn-primary:hover .ml-sweep-light,
+.ml-btn-primary:focus-visible .ml-sweep-light {
+  animation: ml-shimmer 0.60s ease forwards;
+}
+
+/* ── Luxury Underlit Card ──────────────────────────────────── */
+/*
+   Usage: add class "ml-card" alongside existing card classes.
+   Works correctly even with overflow: hidden.
+   Inset box-shadow provides:
+     - subtle warm underglow at the bottom edge
+     - faint top-edge reflection (polished-surface feel)
+     - soft ambient depth shadow
+*/
+.ml-card {
+  box-shadow:
+    inset 0  1px 0    rgba(255,255,255,0.055),       /* top inner highlight */
+    inset 0 -80px 50px -30px rgba(212,175,55,0.08),  /* warm bottom underglow */
+    0  20px 50px -18px rgba(0,0,0,0.45);              /* ambient depth */
+  transition: box-shadow 0.4s ease, border-color 0.3s ease;
+}
+.ml-card:hover {
+  box-shadow:
+    inset 0  1px 0    rgba(255,255,255,0.09),
+    inset 0 -120px 70px -20px rgba(212,175,55,0.28), /* ~quarter card glow on hover */
+    0  0   20px  4px  rgba(212,175,55,0.10),          /* outer ambient gold */
+    0  24px 60px -16px rgba(0,0,0,0.55);
+}
+
+/* ── Blueprint Grid Background ─────────────────────────────── */
+/*
+   Usage: add class "ml-blueprint" to a relatively-positioned container.
+   Renders a faint warm grid — architectural / structural drawing cue.
+*/
+.ml-blueprint {
+  position: relative;
+}
+.ml-blueprint::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(212,175,55,0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(212,175,55,0.04) 1px, transparent 1px);
+  background-size: 34px 34px;
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* ── Accessible Focus Ring ─────────────────────────────────── */
+.ml-btn-outline:focus-visible,
+.ml-btn-primary:focus-visible {
+  outline: 2px solid rgba(212,175,55,0.7);
+  outline-offset: 3px;
+}
+
+/* ── Reduced Motion Overrides ──────────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  .ml-sweep,
+  .ml-sweep-light {
+    animation: none !important;
+    opacity: 0 !important;
+  }
+  .ml-card {
+    transition: none;
+  }
+}
