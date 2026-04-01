@@ -1,44 +1,8 @@
 {
-  "name": "contracting-company-website",
+  "name": "your-package-name",
   "version": "1.0.0",
-  "private": true,
-  "homepage": ".",
-  "dependencies": {
-    "autoprefixer": "^10.4.17",
-    "framer-motion": "^10.18.0",
-    "postcss": "^8.4.35",
-    "react": "^18.2.0",
-    "react-dom": "^18.2.0",
-    "react-router-dom": "^6.21.3",
-    "react-scripts": "5.0.1",
-    "tailwindcss": "^3.4.1"
-  },
-  "scripts": {
-    "start": "react-scripts start",
-    "build": "node node_modules/react-scripts/scripts/build.js",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build"
-  },
-  "eslintConfig": {
-    "extends": [
-      "react-app"
-    ]
-  },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
-  },
   "devDependencies": {
-    "gh-pages": "^6.3.0"
+    "thepopebot": "^1.2.73",
+    // other dev dependencies
   }
 }
