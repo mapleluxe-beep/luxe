@@ -116,53 +116,77 @@ function BeforeAfterImg() {
   const [pos, setPos] = useState(50);
   const dragging = useRef(false);
   const containerRef = useRef(null);
+  const touchStartX = useRef(null);
+  const touchStartY = useRef(null);
+
   const move = (clientX) => {
     if (!containerRef.current) return;
     const { left, width } = containerRef.current.getBoundingClientRect();
     setPos(Math.min(100, Math.max(0, ((clientX - left) / width) * 100)));
   };
+
   return (
-    <div ref={containerRef} className="relative rounded-2xl overflow-hidden cursor-col-resize select-none border border-[#2A2A2A] shadow-xl" style={{ aspectRatio: "16/9" }}
-      onMouseDown={() => (dragging.current = true)} onMouseUp={() => (dragging.current = false)}
-      onMouseLeave={() => (dragging.current = false)} onMouseMove={(e) => dragging.current && move(e.clientX)}
-      onTouchMove={(e) => move(e.touches[0].clientX)}>
+    <div
+      ref={containerRef}
+      className="relative rounded-2xl overflow-hidden select-none border border-[#2A2A2A] shadow-xl"
+      style={{ aspectRatio: "16/9", cursor: dragging.current ? "col-resize" : "default" }}
+      onMouseDown={() => { dragging.current = true; }}
+      onMouseUp={() => { dragging.current = false; }}
+      onMouseLeave={() => { dragging.current = false; }}
+      onMouseMove={(e) => { if (dragging.current) move(e.clientX); }}
+      onTouchStart={(e) => {
+        touchStartX.current = e.touches[0].clientX;
+        touchStartY.current = e.touches[0].clientY;
+      }}
+      onTouchMove={(e) => {
+        const dx = Math.abs(e.touches[0].clientX - touchStartX.current);
+        const dy = Math.abs(e.touches[0].clientY - touchStartY.current);
+        if (dx > dy) {
+          e.preventDefault();
+          move(e.touches[0].clientX);
+        }
+      }}
+    >
       <img src="/images/wallpanelafter.png" alt="After" className="absolute inset-0 w-full h-full object-cover" />
       <div className="absolute inset-0 overflow-hidden" style={{ width: `${pos}%` }}>
         <img src="/images/wallpanelbefore.png" alt="Before" className="absolute inset-0 w-full h-full object-cover" style={{ width: `${10000 / pos}%`, maxWidth: "none" }} />
         <div className="absolute inset-0 bg-black/20" />
-        <div className="absolute top-3 left-3 text-xs font-bold bg-black/70 text-white px-2 py-1 rounded">BEFORE</div>
+        <div className="absolute top-3 left-3 text-xs font-bold tracking-widest bg-black/70 text-white px-2 py-1 rounded-md uppercase">Before</div>
       </div>
-      <div className="absolute top-3 right-3 text-xs font-bold bg-[#D4AF37] text-[#111111] px-2 py-1 rounded">AFTER</div>
-      <div className="absolute top-0 bottom-0 w-0.5 bg-white/80" style={{ left: `${pos}%` }}>
-        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-9 h-9 rounded-full bg-white border-2 border-[#D4AF37] flex items-center justify-center shadow-lg">
-          <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <div className="absolute top-3 right-3 text-xs font-bold tracking-widest bg-[#D4AF37] text-[#111111] px-2 py-1 rounded-md uppercase">After</div>
+      {/* Drag handle */}
+      <div className="absolute top-0 bottom-0 w-px bg-white/60" style={{ left: `${pos}%`, pointerEvents: "none" }}>
+        <div className="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 w-10 h-10 rounded-full bg-[#0A0A0A] border-2 border-[#D4AF37] flex items-center justify-center shadow-[0_0_20px_rgba(212,175,55,0.4)] cursor-col-resize" style={{ pointerEvents: "all" }}
+          onMouseDown={(e) => { e.stopPropagation(); dragging.current = true; }}>
+          <svg className="w-4 h-4 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 9l-4 3 4 3M16 9l4 3-4 3" />
           </svg>
         </div>
       </div>
+      <div className="absolute bottom-3 left-1/2 -translate-x-1/2 text-[10px] tracking-widest text-white/40 uppercase font-mono pointer-events-none">Drag to compare</div>
     </div>
   );
 }
 
 // ─── CHAT DEMO ────────────────────────────────────────────────────────────────
 const chatScript = [
-  { from: "client", name: "Jane Arnold", text: "Hi — I want to redo our backyard deck. About 500 sqft, southwest Calgary. We want something premium that lasts.", delay: 0 },
-  { from: "ai", text: "Hi Jane — great project. Cedar or composite decking both hold up beautifully through Calgary winters. Do you have a preference, or would you like me to walk through the differences?", delay: 1400 },
-  { from: "client", name: "Jane Arnold", text: "Composite would be great — low maintenance. We also want built-in benches and maybe a pergola.", delay: 3000 },
-  { from: "ai", text: "Perfect combination. Composite + built-in seating is our most popular package for SW Calgary properties — it looks incredible and holds its value well.\n\nBased on 500 sqft composite deck, built-in benches, and a cedar pergola:\n\n• Deck (composite, framing, footings): $***,*** – $***,***\n• Built-in bench seating: $*,*** – $*,***\n• Cedar pergola: $*,*** – $**,***\n• Timeline: 3 – 4 weeks from deposit\n\nUpload a few photos and I can sharpen that estimate considerably.", delay: 4800 },
-  { from: "client", name: "Jane Arnold", text: "That's exactly what I needed. I'll upload some photos now.", delay: 7200 },
-  { from: "ai", text: "Perfect. Once we receive your photos, a senior estimator will review and send a clear scope, timeline, and fixed-price proposal — usually within 12 hours.\n\nWould you like me to flag this project for our next available team?", delay: 8800 },
+  { from: "client", name: "Jane Arnold", text: "Hi — we're looking to do a full living room renovation. Open-concept feel, new flooring, a feature wall, and updated lighting throughout.", delay: 0 },
+  { from: "ai", text: "Hi Jane — beautiful project. Are we opening up any walls for the open-concept look, or focusing on finishes — flooring, millwork, and lighting?", delay: 1400 },
+  { from: "client", name: "Jane Arnold", text: "Mostly finishes. Engineered hardwood floors, a custom built-in feature wall with integrated lighting, and new trim and baseboards throughout.", delay: 3000 },
+  { from: "ai", text: "Perfect scope — here's a preliminary range based on what you've described:\n\n• Engineered hardwood (supply + install): $8,000 – $12,000\n• Custom built-in feature wall w/ integrated lighting: $6,500 – $10,000\n• Trim, baseboards & casings: $2,500 – $4,000\n• Timeline: 2 – 3 weeks from deposit\n\nSend a few photos and room dimensions and I can sharpen this considerably.", delay: 4800 },
+  { from: "client", name: "Jane Arnold", text: "That's exactly the clarity I was looking for. I'll grab some photos and measurements today.", delay: 7200 },
+  { from: "ai", text: "Perfect. Once we have your photos, a senior estimator will review and send a written scope, fixed price, and timeline — typically within 12 hours.\n\nWould you like us to flag this for our next available interior team?", delay: 8800 },
   { from: "client", name: "Jane Arnold", text: "Yes please!", delay: 10400 },
-  { from: "ai", text: "Done — your project is flagged. You'll hear from us within 12 hours. Looking forward to building something great for you, Jane. ✓", delay: 12000 },
+  { from: "ai", text: "Done — your project is flagged and prioritized. You'll hear from us within 12 hours. Looking forward to transforming your space, Jane. ✓", delay: 12000 },
 ];
 
 function TypingDots() {
   return (
-    <span className="inline-flex gap-1 items-end h-4">
+    <span className="inline-flex gap-[3px] items-end h-4">
       {[0, 1, 2].map((i) => (
-        <motion.span key={i} className="w-1.5 h-1.5 rounded-full bg-[#6A6A6A]"
+        <motion.span key={i} className="w-[5px] h-[5px] rounded-full bg-[#D4AF37]/60"
           animate={{ opacity: [0.3, 1, 0.3], y: [0, -3, 0] }}
-          transition={{ repeat: Infinity, duration: 0.8, delay: i * 0.15 }} />
+          transition={{ repeat: Infinity, duration: 0.9, delay: i * 0.18 }} />
       ))}
     </span>
   );
@@ -172,16 +196,17 @@ function ChatDemo() {
   const [visible, setVisible] = useState([]);
   const [typing, setTyping] = useState(false);
   const [started, setStarted] = useState(false);
+  const [done, setDone] = useState(false);
   const bottomRef = useRef(null);
 
   useEffect(() => {
     if (!started) return;
-    setVisible([]); setTyping(false);
+    setVisible([]); setTyping(false); setDone(false);
     let timeouts = [];
     chatScript.forEach((msg, i) => {
       if (msg.from === "ai") {
         const t1 = setTimeout(() => setTyping(true), msg.delay);
-        const t2 = setTimeout(() => { setTyping(false); setVisible((v) => [...v, i]); }, msg.delay + 1100);
+        const t2 = setTimeout(() => { setTyping(false); setVisible((v) => [...v, i]); if (i === chatScript.length - 1) setDone(true); }, msg.delay + 1100);
         timeouts.push(t1, t2);
       } else {
         timeouts.push(setTimeout(() => setVisible((v) => [...v, i]), msg.delay));
@@ -193,51 +218,135 @@ function ChatDemo() {
   useEffect(() => { bottomRef.current?.scrollIntoView({ behavior: "smooth" }); }, [visible, typing]);
 
   return (
-    <div className="rounded-2xl border border-[#2A2A2A] bg-[#111111] overflow-hidden shadow-xl max-w-lg w-full mx-auto">
-      <div className="flex items-center gap-3 px-4 py-3 bg-[#181818] border-b border-[#2A2A2A]">
-        <div className="w-8 h-8 rounded-full bg-[#D4AF37] flex items-center justify-center text-[#0A0A0A] font-black text-sm">M</div>
-        <div>
-          <div className="text-xs font-bold text-white">MapleLuxe Estimating</div>
-          <div className="flex items-center gap-1">
-            <span className="w-1.5 h-1.5 rounded-full bg-green-400 animate-pulse" />
-            <span className="text-[10px] text-green-400">Responding within 12 hours</span>
+    <div className="w-full max-w-lg mx-auto" style={{ filter: "drop-shadow(0 0 40px rgba(212,175,55,0.08))" }}>
+      {/* Terminal-style header bar */}
+      <div className="rounded-t-2xl border border-[#2A2A2A] border-b-0 bg-[#141414] px-4 py-3 flex items-center justify-between">
+        <div className="flex items-center gap-2">
+          <div className="flex gap-1.5">
+            <div className="w-2.5 h-2.5 rounded-full bg-[#3A3A3A]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#3A3A3A]" />
+            <div className="w-2.5 h-2.5 rounded-full bg-[#3A3A3A]" />
           </div>
+          <span className="text-[10px] font-mono text-[#3A3A3A] ml-2 tracking-widest uppercase">maple-estimating · secure channel</span>
+        </div>
+        <div className="flex items-center gap-1.5">
+          <span className="w-1.5 h-1.5 rounded-full bg-green-400/80 animate-pulse" />
+          <span className="text-[10px] font-mono text-green-400/80">live</span>
         </div>
       </div>
-      <div className="p-4 space-y-3 min-h-[280px] max-h-[340px] overflow-y-auto bg-[#0F0F0F]">
+
+      {/* Chat avatar header */}
+      <div className="border-x border-[#2A2A2A] bg-[#111111] px-5 py-4 flex items-center gap-4"
+        style={{ borderTop: "1px solid rgba(212,175,55,0.15)", background: "linear-gradient(180deg, #161616 0%, #111111 100%)" }}>
+        <div className="relative">
+          <div className="w-10 h-10 rounded-full flex items-center justify-center font-black text-[#0A0A0A] text-sm"
+            style={{ background: "linear-gradient(135deg, #D4AF37 0%, #B8902A 100%)" }}>M</div>
+          <span className="absolute -bottom-0.5 -right-0.5 w-3 h-3 rounded-full bg-green-400 border-2 border-[#111111]" />
+        </div>
+        <div className="flex-1 min-w-0">
+          <div className="text-sm font-semibold text-white tracking-tight">MapleLuxe Estimating</div>
+          <div className="text-[11px] text-[#6B6B6B] font-mono">Jane Arnold · Living Room Remodel · SW Calgary</div>
+        </div>
+        <div className="text-[10px] font-mono text-[#D4AF37]/60 tracking-widest uppercase">≤ 12h reply</div>
+      </div>
+
+      {/* Messages */}
+      <div className="border-x border-[#2A2A2A] bg-[#0D0D0D] p-5 min-h-[300px] max-h-[360px] overflow-y-auto space-y-4"
+        style={{ scrollbarWidth: "thin", scrollbarColor: "#2A2A2A transparent" }}>
         {!started ? (
-          <div className="flex flex-col items-center justify-center h-52 gap-4">
-            <div className="w-12 h-12 rounded-full bg-[#D4AF37]/15 border border-[#D4AF37]/30 flex items-center justify-center text-xl">💬</div>
-            <div className="text-center">
-              <p className="text-[#8A8A8A] text-sm mb-1">See how a real quote conversation works</p>
-              <p className="text-[#5A5A5A] text-xs">Jane Arnold · Living Room Remodel, SW Calgary</p>
+          <div className="flex flex-col items-center justify-center h-56 gap-6">
+            {/* Animated rings */}
+            <div className="relative w-16 h-16 flex items-center justify-center">
+              <div className="absolute inset-0 rounded-full border border-[#D4AF37]/20 animate-ping" style={{ animationDuration: "2s" }} />
+              <div className="absolute inset-1 rounded-full border border-[#D4AF37]/10" />
+              <div className="w-12 h-12 rounded-full flex items-center justify-center"
+                style={{ background: "linear-gradient(135deg, rgba(212,175,55,0.15) 0%, rgba(212,175,55,0.05) 100%)", border: "1px solid rgba(212,175,55,0.3)" }}>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#D4AF37" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z" />
+                </svg>
+              </div>
             </div>
-            <button onClick={() => setStarted(true)} className="px-5 py-2 bg-[#D4AF37] text-[#0A0A0A] font-bold rounded-xl text-sm hover:bg-[#B8902A] transition-colors">
-              ▶ Play Conversation
+            <div className="text-center">
+              <p className="text-[#C0C0C0] text-sm font-medium mb-1">See a real client conversation</p>
+              <p className="text-[#4A4A4A] text-xs font-mono">from first message → fixed-price proposal</p>
+            </div>
+            <button onClick={() => setStarted(true)}
+              className="group flex items-center gap-2.5 px-6 py-2.5 rounded-xl text-[#0A0A0A] text-sm font-bold transition-all duration-200 hover:scale-105 active:scale-95"
+              style={{ background: "linear-gradient(135deg, #D4AF37 0%, #B8902A 100%)", boxShadow: "0 0 24px rgba(212,175,55,0.25)" }}>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="5 3 19 12 5 21 5 3" />
+              </svg>
+              Play Conversation
             </button>
           </div>
         ) : (
           <>
             {chatScript.map((msg, i) =>
               visible.includes(i) ? (
-                <motion.div key={i} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} className={`flex flex-col ${msg.from === "client" ? "items-end" : "items-start"}`}>
-                  {msg.name && <span className="text-[10px] text-[#5A5A5A] mb-0.5 px-1">{msg.name}</span>}
-                  <div className={`max-w-[82%] px-3 py-2 rounded-2xl text-sm whitespace-pre-wrap leading-relaxed ${msg.from === "client" ? "bg-[#D4AF37] text-[#0A0A0A] font-medium rounded-br-sm" : "bg-[#1A1A1A] text-[#E0E0E0] border border-[#2A2A2A] rounded-bl-sm"}`}>
+                <motion.div key={i} initial={{ opacity: 0, y: 8, scale: 0.97 }} animate={{ opacity: 1, y: 0, scale: 1 }}
+                  transition={{ duration: 0.25, ease: "easeOut" }}
+                  className={`flex flex-col ${msg.from === "client" ? "items-end" : "items-start"}`}>
+                  {msg.name && (
+                    <span className="text-[10px] font-mono text-[#4A4A4A] mb-1 px-1 tracking-wide">{msg.name}</span>
+                  )}
+                  <div className={`max-w-[84%] px-4 py-3 text-sm whitespace-pre-wrap leading-relaxed ${
+                    msg.from === "client"
+                      ? "text-[#0A0A0A] font-medium rounded-2xl rounded-br-sm"
+                      : "text-[#D8D8D8] rounded-2xl rounded-bl-sm border"
+                  }`} style={msg.from === "client" ? {
+                    background: "linear-gradient(135deg, #D4AF37 0%, #C09A28 100%)",
+                    boxShadow: "0 2px 16px rgba(212,175,55,0.2)"
+                  } : {
+                    background: "linear-gradient(180deg, #1C1C1C 0%, #181818 100%)",
+                    borderColor: "#2A2A2A"
+                  }}>
                     {msg.text}
                   </div>
+                  {msg.from === "client" && visible.includes(i) && (
+                    <span className="text-[9px] font-mono text-[#3A3A3A] mt-1 px-1 tracking-widest">SENT ✓</span>
+                  )}
                 </motion.div>
               ) : null
             )}
             {typing && (
-              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="flex justify-start">
-                <div className="bg-[#1A1A1A] border border-[#2A2A2A] px-3 py-2 rounded-2xl rounded-bl-sm">
+              <motion.div initial={{ opacity: 0, y: 4 }} animate={{ opacity: 1, y: 0 }} className="flex items-start gap-2">
+                <div className="w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                  style={{ background: "linear-gradient(135deg, #D4AF37 0%, #B8902A 100%)" }}>
+                  <span className="text-[#0A0A0A] text-[9px] font-black">M</span>
+                </div>
+                <div className="px-4 py-3 rounded-2xl rounded-bl-sm border border-[#2A2A2A]"
+                  style={{ background: "linear-gradient(180deg, #1C1C1C 0%, #181818 100%)" }}>
                   <TypingDots />
+                </div>
+              </motion.div>
+            )}
+            {done && (
+              <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 0.5 }}
+                className="flex justify-center pt-2">
+                <div className="flex items-center gap-2 px-3 py-1.5 rounded-full"
+                  style={{ background: "rgba(212,175,55,0.08)", border: "1px solid rgba(212,175,55,0.2)" }}>
+                  <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37]" />
+                  <span className="text-[10px] font-mono text-[#D4AF37]/70 tracking-widest uppercase">Proposal sent · 11h 42m</span>
                 </div>
               </motion.div>
             )}
           </>
         )}
         <div ref={bottomRef} />
+      </div>
+
+      {/* Input bar (decorative) */}
+      <div className="rounded-b-2xl border border-[#2A2A2A] border-t-0 bg-[#0F0F0F] px-4 py-3 flex items-center gap-3"
+        style={{ borderTop: "1px solid #1A1A1A" }}>
+        <div className="flex-1 rounded-xl bg-[#1A1A1A] border border-[#2A2A2A] px-3 py-2 text-xs text-[#3A3A3A] font-mono">
+          Send a message...
+        </div>
+        <div className="w-8 h-8 rounded-xl flex items-center justify-center flex-shrink-0"
+          style={{ background: "linear-gradient(135deg, #D4AF37 0%, #B8902A 100%)" }}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="#0A0A0A">
+            <line x1="22" y1="2" x2="11" y2="13" /><polygon points="22 2 15 22 11 13 2 9 22 2" />
+          </svg>
+        </div>
       </div>
     </div>
   );
