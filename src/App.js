@@ -62,6 +62,7 @@ function ProjectCardImage({ project }) {
 }
 
 // ─── SERVICES CAROUSEL ───────────────────────────────────────────────────────
+// eslint-disable-next-line no-unused-vars
 function ServicesCarousel({ services }) {
   const allItems = services.flatMap(g => g.items);
   const [idx, setIdx] = useState(0);
