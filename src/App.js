@@ -779,6 +779,515 @@ function FAQItem({ q, a }) {
   );
 }
 
+// ─── RENOVATE AI ──────────────────────────────────────────────────────────────
+const AI_STYLES = [
+  { id: "modern", label: "Modern Minimalist", desc: "Clean lines, neutral palettes, uncluttered spaces." },
+  { id: "warm", label: "Warm Contemporary", desc: "Earthy tones, natural textures, inviting atmosphere." },
+  { id: "scandi", label: "Scandinavian", desc: "Light woods, whites, functional simplicity." },
+  { id: "farmhouse", label: "Farmhouse", desc: "Shiplap, warm whites, vintage-inspired charm." },
+  { id: "industrial", label: "Industrial Loft", desc: "Exposed brick, steel, concrete, raw materials." },
+  { id: "mediterranean", label: "Mediterranean", desc: "Terracotta, arches, warm stone, rich colour." },
+  { id: "midcentury", label: "Mid-Century Modern", desc: "Organic forms, bold accents, retro-forward design." },
+];
+const AI_ROOMS = ["Living Room", "Kitchen", "Bathroom", "Bedroom", "Exterior Facade", "Backyard/Deck", "Full House"];
+const AI_PROGRESS_STEPS = [
+  "Analyzing room structure…",
+  "Mapping surfaces & materials…",
+  "Applying design style…",
+  "Generating options…",
+  "Finalizing renders…",
+];
+const AI_RESULTS = {
+  before: "https://images.unsplash.com/photo-1484101403633-562f891dc89a?auto=format&fit=crop&w=800&q=80",
+  after: "https://images.unsplash.com/photo-1616486338812-3dadae4b4ace?auto=format&fit=crop&w=800&q=80",
+  cost: {
+    materials: "$8,400",
+    labor: "$6,200",
+    timeline: "3–4 weeks",
+    total: "$14,600",
+  },
+};
+
+function RenovateAI({ onClose }) {
+  const [tab, setTab] = useState("transform");
+  const [uploadedImage, setUploadedImage] = useState(null);
+  const [selectedStyle, setSelectedStyle] = useState(null);
+  const [selectedRoom, setSelectedRoom] = useState(null);
+  const [prompt, setPrompt] = useState("");
+  const [phase, setPhase] = useState("upload"); // upload | processing | results
+  const [progressIdx, setProgressIdx] = useState(0);
+  const [progressPct, setProgressPct] = useState(0);
+  const fileInputRef = useRef(null);
+
+  const handleFileChange = (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (ev) => setUploadedImage(ev.target.result);
+    reader.readAsDataURL(file);
+  };
+
+  const handleGenerate = () => {
+    setPhase("processing");
+    setProgressIdx(0);
+    setProgressPct(0);
+    let idx = 0;
+    let pct = 0;
+    const stepDuration = 700;
+    const pctStep = 100 / AI_PROGRESS_STEPS.length;
+    const interval = setInterval(() => {
+      idx += 1;
+      pct = Math.min(100, Math.round(pctStep * idx));
+      setProgressIdx(idx);
+      setProgressPct(pct);
+      if (idx >= AI_PROGRESS_STEPS.length) {
+        clearInterval(interval);
+        setTimeout(() => setPhase("results"), 400);
+      }
+    }, stepDuration);
+  };
+
+  const handleReset = () => {
+    setPhase("upload");
+    setUploadedImage(null);
+    setSelectedStyle(null);
+    setSelectedRoom(null);
+    setPrompt("");
+    setProgressIdx(0);
+    setProgressPct(0);
+  };
+
+  const tabs = [
+    { id: "transform", label: "✨ Transform" },
+    { id: "styles", label: "🎨 Styles" },
+    { id: "history", label: "🕐 History" },
+  ];
+
+  return (
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0 }}
+      className="fixed inset-0 z-[100] flex flex-col bg-[#0A0A0A] overflow-hidden"
+    >
+      {/* Header */}
+      <div className="shrink-0 flex items-center justify-between px-4 sm:px-6 py-4 border-b border-[#2A2A2A] bg-[#0F0F0F]">
+        <div className="flex items-center gap-3">
+          <div className="h-8 w-8 rounded-lg bg-[#D4AF37] grid place-items-center shrink-0">
+            <span className="text-[#111111] font-black text-sm">M</span>
+          </div>
+          <div>
+            <div className="text-sm font-bold text-white leading-tight">AI Room Transformer</div>
+            <div className="text-[10px] text-[#6A6A6A] tracking-widest uppercase">MapleLuxe · Beta</div>
+          </div>
+        </div>
+        {/* Tabs */}
+        <div className="hidden sm:flex items-center gap-1 bg-[#181818] border border-[#2A2A2A] rounded-2xl p-1">
+          {tabs.map((t) => (
+            <button
+              key={t.id}
+              onClick={() => setTab(t.id)}
+              className={`px-4 py-1.5 rounded-xl text-xs font-semibold transition-all ${
+                tab === t.id
+                  ? "bg-[#D4AF37] text-[#0A0A0A]"
+                  : "text-[#8A8A8A] hover:text-white"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <button
+          onClick={onClose}
+          className="text-[#6A6A6A] hover:text-white text-2xl leading-none transition-colors w-8 h-8 flex items-center justify-center rounded-xl hover:bg-[#1A1A1A]"
+        >
+          ×
+        </button>
+      </div>
+
+      {/* Mobile tabs */}
+      <div className="sm:hidden flex border-b border-[#2A2A2A] shrink-0">
+        {tabs.map((t) => (
+          <button
+            key={t.id}
+            onClick={() => setTab(t.id)}
+            className={`flex-1 py-2.5 text-xs font-semibold transition-all ${
+              tab === t.id
+                ? "text-[#D4AF37] border-b-2 border-[#D4AF37]"
+                : "text-[#6A6A6A]"
+            }`}
+          >
+            {t.label}
+          </button>
+        ))}
+      </div>
+
+      {/* Body */}
+      <div className="flex-1 overflow-y-auto">
+        <AnimatePresence mode="wait">
+          {/* ── TRANSFORM TAB ── */}
+          {tab === "transform" && (
+            <motion.div
+              key="transform"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="max-w-5xl mx-auto px-4 sm:px-6 py-6 space-y-6"
+            >
+              {phase === "upload" && (
+                <>
+                  {/* Camera / Upload Section */}
+                  <div className="rounded-2xl border border-[#2A2A2A] bg-[#111111] overflow-hidden">
+                    <div className="bg-[#181818] px-5 py-3 border-b border-[#2A2A2A] flex items-center gap-2">
+                      <span className="text-base">📸</span>
+                      <span className="text-sm font-bold text-white">Upload Your Space</span>
+                    </div>
+                    <div className="p-5">
+                      {uploadedImage ? (
+                        <div className="relative rounded-xl overflow-hidden" style={{ aspectRatio: "4/3" }}>
+                          <img
+                            src={uploadedImage}
+                            alt="Uploaded room"
+                            className="w-full h-full object-cover"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent" />
+                          <button
+                            onClick={() => setUploadedImage(null)}
+                            className="absolute top-3 right-3 bg-black/60 text-white rounded-full w-7 h-7 flex items-center justify-center text-sm hover:bg-black/80 transition-colors"
+                          >
+                            ×
+                          </button>
+                          <div className="absolute bottom-3 left-3">
+                            <span className="bg-[#D4AF37] text-[#0A0A0A] text-[10px] font-bold px-2.5 py-1 rounded-full">✓ Photo Ready</span>
+                          </div>
+                        </div>
+                      ) : (
+                        <div
+                          className="rounded-xl border-2 border-dashed border-[#2A2A2A] hover:border-[#D4AF37]/50 transition-all cursor-pointer flex flex-col items-center justify-center gap-4 p-8"
+                          style={{ aspectRatio: "4/3" }}
+                          onClick={() => fileInputRef.current?.click()}
+                        >
+                          <div className="w-16 h-16 rounded-full bg-[#1A1A1A] flex items-center justify-center">
+                            <svg className="w-8 h-8 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                          </div>
+                          <div className="text-center">
+                            <p className="text-sm font-semibold text-[#E0E0E0] mb-1">Take a photo or upload one</p>
+                            <p className="text-xs text-[#5A5A5A]">Interior, exterior, backyard — any space works</p>
+                          </div>
+                          <div className="flex gap-3">
+                            <button
+                              onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                              className="px-4 py-2 rounded-xl text-xs font-bold text-[#0A0A0A] transition-colors"
+                              style={{ background: "linear-gradient(135deg, #D4AF37, #B8902A)" }}
+                            >
+                              📁 Upload Photo
+                            </button>
+                            <button
+                              onClick={(e) => { e.stopPropagation(); fileInputRef.current?.click(); }}
+                              className="px-4 py-2 rounded-xl text-xs font-semibold border border-[#2A2A2A] text-[#C0C0C0] hover:border-[#D4AF37]/40 transition-colors"
+                            >
+                              📷 Use Camera
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                      <input
+                        ref={fileInputRef}
+                        type="file"
+                        accept="image/*"
+                        capture="environment"
+                        className="hidden"
+                        onChange={handleFileChange}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Design Options Panel */}
+                  <div className="rounded-2xl border border-[#2A2A2A] bg-[#111111] overflow-hidden">
+                    <div className="bg-[#181818] px-5 py-3 border-b border-[#2A2A2A] flex items-center gap-2">
+                      <span className="text-base">🎨</span>
+                      <span className="text-sm font-bold text-white">Design Options</span>
+                    </div>
+                    <div className="p-5 space-y-5">
+                      {/* Style presets */}
+                      <div>
+                        <p className="text-xs font-semibold text-[#8A8A8A] uppercase tracking-widest mb-3">Style Preset</p>
+                        <div className="flex flex-wrap gap-2">
+                          {AI_STYLES.map((s) => (
+                            <button
+                              key={s.id}
+                              onClick={() => setSelectedStyle(s.id === selectedStyle ? null : s.id)}
+                              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                                selectedStyle === s.id
+                                  ? "bg-[#D4AF37] text-[#0A0A0A] border-[#D4AF37]"
+                                  : "border-[#2A2A2A] text-[#8A8A8A] hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
+                              }`}
+                            >
+                              {s.label}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Room type */}
+                      <div>
+                        <p className="text-xs font-semibold text-[#8A8A8A] uppercase tracking-widest mb-3">Room Type</p>
+                        <div className="flex flex-wrap gap-2">
+                          {AI_ROOMS.map((r) => (
+                            <button
+                              key={r}
+                              onClick={() => setSelectedRoom(r === selectedRoom ? null : r)}
+                              className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all ${
+                                selectedRoom === r
+                                  ? "bg-[#D4AF37]/20 text-[#D4AF37] border-[#D4AF37]/60"
+                                  : "border-[#2A2A2A] text-[#8A8A8A] hover:border-[#D4AF37]/40 hover:text-[#D4AF37]"
+                              }`}
+                            >
+                              {r}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+
+                      {/* Custom prompt */}
+                      <div>
+                        <p className="text-xs font-semibold text-[#8A8A8A] uppercase tracking-widest mb-2">Custom Instructions (optional)</p>
+                        <textarea
+                          rows={2}
+                          value={prompt}
+                          onChange={(e) => setPrompt(e.target.value)}
+                          placeholder="e.g. Keep the windows, add a kitchen island, use warm oak tones…"
+                          className="w-full rounded-xl border border-[#2A2A2A] bg-[#0F0F0F] text-white px-4 py-3 text-sm outline-none focus:ring-2 focus:ring-[#D4AF37]/40 focus:border-[#D4AF37] placeholder:text-[#3A3A3A] transition-colors resize-none"
+                        />
+                      </div>
+
+                      {/* Generate CTA */}
+                      <button
+                        onClick={handleGenerate}
+                        disabled={!uploadedImage}
+                        className={`w-full py-3.5 rounded-xl text-sm font-bold transition-all ${
+                          uploadedImage
+                            ? "text-[#0A0A0A] hover:opacity-90 shadow-lg shadow-[#D4AF37]/20"
+                            : "bg-[#1A1A1A] text-[#4A4A4A] cursor-not-allowed"
+                        }`}
+                        style={uploadedImage ? { background: "linear-gradient(135deg, #D4AF37, #B8902A)" } : {}}
+                      >
+                        {uploadedImage ? "✨ Generate Design Options" : "Upload a photo first to generate"}
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+
+              {phase === "processing" && (
+                <div className="rounded-2xl border border-[#2A2A2A] bg-[#111111] overflow-hidden">
+                  <div className="relative" style={{ aspectRatio: "4/3" }}>
+                    {uploadedImage && (
+                      <img src={uploadedImage} alt="Processing" className="w-full h-full object-cover" />
+                    )}
+                    {/* Scan-line overlay */}
+                    <div className="absolute inset-0 overflow-hidden pointer-events-none">
+                      <motion.div
+                        animate={{ y: ["0%", "100%", "0%"] }}
+                        transition={{ duration: 2.5, repeat: Infinity, ease: "linear" }}
+                        className="absolute left-0 right-0 h-0.5 bg-[#D4AF37]/70"
+                        style={{ boxShadow: "0 0 12px 4px rgba(212,175,55,0.4)" }}
+                      />
+                      {/* Grid overlay */}
+                      <div
+                        className="absolute inset-0 opacity-20"
+                        style={{
+                          backgroundImage:
+                            "linear-gradient(rgba(212,175,55,0.3) 1px, transparent 1px), linear-gradient(90deg, rgba(212,175,55,0.3) 1px, transparent 1px)",
+                          backgroundSize: "40px 40px",
+                        }}
+                      />
+                      {/* Corner brackets */}
+                      {[
+                        "top-3 left-3 border-t border-l",
+                        "top-3 right-3 border-t border-r",
+                        "bottom-3 left-3 border-b border-l",
+                        "bottom-3 right-3 border-b border-r",
+                      ].map((cls, i) => (
+                        <div key={i} className={`absolute w-6 h-6 border-[#D4AF37] ${cls}`} />
+                      ))}
+                      {/* Dark tint */}
+                      <div className="absolute inset-0 bg-[#0A0A0A]/50" />
+                    </div>
+                    {/* Status overlay */}
+                    <div className="absolute inset-0 flex flex-col items-center justify-center gap-4 p-6">
+                      <div className="w-12 h-12 rounded-full bg-[#D4AF37]/20 border border-[#D4AF37]/40 flex items-center justify-center">
+                        <motion.div animate={{ rotate: 360 }} transition={{ duration: 1, repeat: Infinity, ease: "linear" }}>
+                          <svg className="w-6 h-6 text-[#D4AF37]" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                          </svg>
+                        </motion.div>
+                      </div>
+                      <div className="text-center">
+                        <AnimatePresence mode="wait">
+                          <motion.p
+                            key={progressIdx}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -6 }}
+                            className="text-sm font-semibold text-[#D4AF37]"
+                          >
+                            {AI_PROGRESS_STEPS[Math.min(progressIdx, AI_PROGRESS_STEPS.length - 1)]}
+                          </motion.p>
+                        </AnimatePresence>
+                        <p className="text-xs text-[#6A6A6A] mt-1">AI rendering in progress…</p>
+                      </div>
+                      {/* Progress bar */}
+                      <div className="w-full max-w-xs">
+                        <div className="flex justify-between text-[10px] text-[#6A6A6A] mb-1.5">
+                          <span>Progress</span>
+                          <span>{progressPct}%</span>
+                        </div>
+                        <div className="w-full h-1.5 bg-[#2A2A2A] rounded-full overflow-hidden">
+                          <motion.div
+                            animate={{ width: `${progressPct}%` }}
+                            transition={{ duration: 0.5, ease: "easeOut" }}
+                            className="h-full rounded-full"
+                            style={{ background: "linear-gradient(90deg, #D4AF37, #B8902A)" }}
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {phase === "results" && (
+                <div className="space-y-5">
+                  {/* Before / After cards */}
+                  <div>
+                    <p className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest mb-3">Before & After</p>
+                    <div className="grid sm:grid-cols-2 gap-4">
+                      {[
+                        { label: "Before", img: AI_RESULTS.before },
+                        { label: "After (AI Redesign)", img: AI_RESULTS.after },
+                      ].map(({ label, img }) => (
+                        <div key={label} className="rounded-2xl border border-[#2A2A2A] overflow-hidden bg-[#111111]">
+                          <div className="relative" style={{ aspectRatio: "4/3" }}>
+                            <img src={img} alt={label} className="w-full h-full object-cover" />
+                            <div className="absolute top-3 left-3">
+                              <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full ${label === "Before" ? "bg-black/70 text-[#8A8A8A]" : "bg-[#D4AF37] text-[#0A0A0A]"}`}>
+                                {label}
+                              </span>
+                            </div>
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Cost estimate */}
+                  <div className="rounded-2xl border border-[#D4AF37]/30 bg-[#D4AF37]/5 p-5">
+                    <p className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest mb-4">AI Cost Estimate</p>
+                    <div className="grid grid-cols-3 gap-4 mb-4">
+                      {[
+                        { label: "Materials", value: AI_RESULTS.cost.materials },
+                        { label: "Labour", value: AI_RESULTS.cost.labor },
+                        { label: "Timeline", value: AI_RESULTS.cost.timeline },
+                      ].map(({ label, value }) => (
+                        <div key={label} className="text-center">
+                          <div className="text-lg font-extrabold text-white">{value}</div>
+                          <div className="text-[10px] text-[#8A8A8A] mt-0.5">{label}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <div className="border-t border-[#D4AF37]/20 pt-4 flex items-center justify-between">
+                      <span className="text-sm text-[#8A8A8A]">Estimated Total</span>
+                      <span className="text-xl font-black text-[#D4AF37]">{AI_RESULTS.cost.total}</span>
+                    </div>
+                    <p className="text-[10px] text-[#5A5A5A] mt-2">* AI estimate only — get a free accurate quote from MapleLuxe.</p>
+                  </div>
+
+                  {/* Action buttons */}
+                  <div className="flex flex-col sm:flex-row gap-3">
+                    <a
+                      href="#contact"
+                      onClick={onClose}
+                      className="flex-1 py-3.5 rounded-xl text-sm font-bold text-center text-[#0A0A0A] transition-all hover:opacity-90"
+                      style={{ background: "linear-gradient(135deg, #D4AF37, #B8902A)" }}
+                    >
+                      Start Your Free Quote →
+                    </a>
+                    <button
+                      onClick={handleReset}
+                      className="flex-1 py-3.5 rounded-xl text-sm font-semibold border border-[#2A2A2A] text-[#C0C0C0] hover:border-[#D4AF37]/40 hover:text-[#D4AF37] transition-all"
+                    >
+                      🔄 Try Another Style
+                    </button>
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
+
+          {/* ── STYLES TAB ── */}
+          {tab === "styles" && (
+            <motion.div
+              key="styles"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="max-w-5xl mx-auto px-4 sm:px-6 py-6"
+            >
+              <p className="text-xs font-bold text-[#D4AF37] uppercase tracking-widest mb-5">Browse Design Styles</p>
+              <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+                {AI_STYLES.map((s) => (
+                  <button
+                    key={s.id}
+                    onClick={() => { setSelectedStyle(s.id); setTab("transform"); }}
+                    className="text-left rounded-2xl border border-[#2A2A2A] bg-[#111111] hover:border-[#D4AF37]/40 hover:bg-[#141414] p-5 transition-all group"
+                  >
+                    <div className="w-10 h-10 rounded-xl bg-[#D4AF37]/10 border border-[#D4AF37]/20 flex items-center justify-center mb-3 group-hover:bg-[#D4AF37]/20 transition-colors">
+                      <span className="text-[#D4AF37] text-lg">✦</span>
+                    </div>
+                    <div className="font-bold text-sm text-white mb-1">{s.label}</div>
+                    <p className="text-xs text-[#6A6A6A] leading-relaxed">{s.desc}</p>
+                    <span className="text-[10px] text-[#D4AF37] mt-3 block font-semibold group-hover:text-[#C9A530] transition-colors">Use This Style →</span>
+                  </button>
+                ))}
+              </div>
+            </motion.div>
+          )}
+
+          {/* ── HISTORY TAB ── */}
+          {tab === "history" && (
+            <motion.div
+              key="history"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="max-w-5xl mx-auto px-4 sm:px-6 py-6 flex flex-col items-center justify-center min-h-[40vh] gap-4 text-center"
+            >
+              <div className="w-16 h-16 rounded-2xl bg-[#181818] border border-[#2A2A2A] flex items-center justify-center">
+                <span className="text-2xl">🕐</span>
+              </div>
+              <div>
+                <p className="text-sm font-bold text-white mb-1">No saved transformations yet</p>
+                <p className="text-xs text-[#6A6A6A]">Your AI redesigns will appear here once you generate them.</p>
+              </div>
+              <button
+                onClick={() => setTab("transform")}
+                className="px-5 py-2.5 rounded-xl text-xs font-bold text-[#0A0A0A] transition-all hover:opacity-90"
+                style={{ background: "linear-gradient(135deg, #D4AF37, #B8902A)" }}
+              >
+                ✨ Start Your First Transformation
+              </button>
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
+    </motion.div>
+  );
+}
+
 // ─── MAIN SITE ─────────────────────────────────────────────────────────────────
 export default function MapleLuxeSite() {
   const [menuOpen, setMenuOpen] = useState(false);
@@ -787,6 +1296,7 @@ export default function MapleLuxeSite() {
   const [uploadedFiles, setUploadedFiles] = useState([]);
   const [showDemo, setShowDemo] = useState(false);
   const [showSubDash, setShowSubDash] = useState(false);
+  const [showRenovateAI, setShowRenovateAI] = useState(false);
   // Hero background transition: before → after, fires once after 2.5s
   const [heroAfterVisible, setHeroAfterVisible] = useState(false);
   useEffect(() => {
@@ -863,6 +1373,7 @@ export default function MapleLuxeSite() {
       <AnimatePresence>
         {showDemo && <DemoFlow onClose={() => setShowDemo(false)} />}
         {showSubDash && <SubcontractorDashboard onClose={() => setShowSubDash(false)} />}
+        {showRenovateAI && <RenovateAI onClose={() => setShowRenovateAI(false)} />}
       </AnimatePresence>
 
       {/* Sticky Mobile CTA Bar */}
@@ -873,6 +1384,9 @@ export default function MapleLuxeSite() {
           </svg>
           Call Now
         </a>
+        <button onClick={() => setShowRenovateAI(true)} className="flex items-center justify-center w-12 py-3 rounded-xl border border-[#D4AF37]/30 text-[#D4AF37] hover:border-[#D4AF37]/60 hover:bg-[#D4AF37]/5 transition-colors" aria-label="AI Room Preview">
+          📸
+        </button>
         <a href="#contact" className="flex-1 flex items-center justify-center gap-2 py-3 rounded-xl bg-[#D4AF37] text-[#0A0A0A] font-bold text-sm hover:bg-[#C9A530] transition-colors">
           Get Free Quote
         </a>
@@ -1002,6 +1516,13 @@ export default function MapleLuxeSite() {
               </button>
             </motion.div>
 
+            <motion.div variants={fadeUp} className="pt-1">
+              <button onClick={() => setShowRenovateAI(true)} className="inline-flex items-center gap-2 text-xs text-[#8A8A8A] hover:text-[#D4AF37] transition-colors group">
+                <span className="text-sm">📸</span>
+                <span className="group-hover:underline underline-offset-2">AI Room Preview — visualize your renovation instantly</span>
+              </button>
+            </motion.div>
+
             <motion.div variants={fadeUp} className="flex flex-wrap gap-x-6 gap-y-2 pt-2">
               {["✓ Licensed & Insured in Alberta", "✓ Quotes Under 12 Hours", "✓ No Visit Required"].map((t) => (
                 <span key={t} className="text-xs text-[#A0A0A0] font-medium">{t}</span>
@@ -1049,6 +1570,7 @@ export default function MapleLuxeSite() {
                 sub: "See completed builds across Calgary.",
                 cta: "View Projects",
                 href: "#projects",
+                onAI: true,
               },
               {
                 icon: "💬",
@@ -1076,6 +1598,17 @@ export default function MapleLuxeSite() {
                     <p className="text-xs text-[#5A5A5A] leading-relaxed flex-1">{card.sub}</p>
                     <span className="text-xs font-semibold text-[#D4AF37] group-hover:text-[#C9A530] transition-colors">{card.cta} →</span>
                   </button>
+                ) : card.onAI ? (
+                  <div className="ml-card rounded-2xl bg-[#111111] border border-[#1E1E1E] hover:border-[#D4AF37]/30 p-5 flex flex-col gap-3 transition-all duration-300 group">
+                    <div className="text-2xl">{card.icon}</div>
+                    <div className="text-[10px] font-bold uppercase tracking-widest text-[#D4AF37]">{card.label}</div>
+                    <div className="font-bold text-white text-sm leading-snug">{card.headline}</div>
+                    <p className="text-xs text-[#5A5A5A] leading-relaxed flex-1">{card.sub}</p>
+                    <a href={card.href} className="text-xs font-semibold text-[#D4AF37] group-hover:text-[#C9A530] transition-colors">{card.cta} →</a>
+                    <button onClick={() => setShowRenovateAI(true)} className="text-left text-[10px] text-[#6A6A6A] hover:text-[#D4AF37] transition-colors flex items-center gap-1">
+                      <span>✨</span><span className="hover:underline underline-offset-2">Try AI Redesign</span>
+                    </button>
+                  </div>
                 ) : (
                   <a href={card.href} className="ml-card block rounded-2xl bg-[#111111] border border-[#1E1E1E] hover:border-[#D4AF37]/30 p-5 flex flex-col gap-3 transition-all duration-300 group">
                     <div className="text-2xl">{card.icon}</div>
@@ -1107,6 +1640,7 @@ export default function MapleLuxeSite() {
                 points: ["Decks, fencing & outdoor living", "Interior & kitchen renovation", "Fixed-price proposals, always"],
                 cta: "Free Quote",
                 href: "#contact",
+                aiCta: true,
               },
               {
                 icon: "🏢",
@@ -1140,7 +1674,16 @@ export default function MapleLuxeSite() {
                 </ul>
                 {card.onClick
                   ? <button onClick={() => setShowSubDash(true)} className="mt-2 self-start text-sm font-semibold text-[#D4AF37] hover:text-[#C9A530] transition">{card.cta} →</button>
-                  : <a href={card.href} className="mt-2 self-start text-sm font-semibold text-[#D4AF37] hover:text-[#C9A530] transition">{card.cta} →</a>
+                  : (
+                    <div className="flex flex-col gap-2 mt-2">
+                      <a href={card.href} className="self-start text-sm font-semibold text-[#D4AF37] hover:text-[#C9A530] transition">{card.cta} →</a>
+                      {card.aiCta && (
+                        <button onClick={() => setShowRenovateAI(true)} className="self-start text-xs text-[#6A6A6A] hover:text-[#D4AF37] transition flex items-center gap-1">
+                          <span>📸</span><span className="hover:underline underline-offset-2">AI Room Preview</span>
+                        </button>
+                      )}
+                    </div>
+                  )
                 }
               </motion.div>
             ))}
@@ -1550,6 +2093,14 @@ export default function MapleLuxeSite() {
                 </div>
               </div>
               <div className="p-5 bg-[#111111]">
+                {/* AI banner */}
+                <button onClick={() => setShowRenovateAI(true)} className="w-full mb-4 flex items-center gap-3 px-4 py-3 rounded-xl bg-[#D4AF37]/8 border border-[#D4AF37]/25 hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/12 transition-all group text-left">
+                  <span className="text-lg shrink-0">✨</span>
+                  <p className="text-xs text-[#C0C0C0] group-hover:text-white transition-colors">
+                    Want to <span className="text-[#D4AF37] font-semibold">visualize your renovation first?</span> Try our AI Room Transformer
+                  </p>
+                  <span className="ml-auto text-[10px] text-[#D4AF37] font-bold whitespace-nowrap shrink-0">Try It →</span>
+                </button>
                 <input type="file" id="media-upload" name="media" multiple accept="image/*,video/*,.pdf" className="hidden" onChange={handleFileChange} />
                 <label htmlFor="media-upload" className="block cursor-pointer">
                   <div className="border-2 border-dashed border-[#2A2A2A] rounded-xl p-6 text-center hover:border-[#D4AF37]/50 hover:bg-[#D4AF37]/5 transition-all group">
